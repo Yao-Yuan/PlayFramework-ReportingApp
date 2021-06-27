@@ -1,0 +1,87 @@
+@import models.Listing
+@(averagePricePerSellerType: Map[String, Double],
+    percentageOfCarsByMake: Map[String, Double],
+    averagePriceOfMostContactedListing: Double,
+    mostContactedListingPerMonth: Seq[(java.time.LocalDate, Seq[(Listing, Int)])])
+
+        <!-- todo: beautify -->
+<div class="center">
+    <h1> AutoScout24 Listing Report </h1>
+    <h2>Average Listing Selling Price per Seller Type</h2>
+    <table>
+        <thead>
+          <tr>
+              <th>Seller Type</th>
+              <th>Average in Euro</th>
+          </tr>
+        </thead>
+        <tbody>
+        @for((sellerType, avgPrice) <- averagePricePerSellerType) {
+          <tr>
+              <td>@sellerType</td>
+              <td>€ @avgPrice.toInt,-</td>
+          </tr>
+        }
+        </tbody>
+      </table>
+
+    <h2>Percentual distribution of available cars by Make</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Make</th>
+            <th>Distribution</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for((make, dist) <- percentageOfCarsByMake) {
+        <tr>
+            <td>@make</td>
+            <td>@{(dist*100).toInt}%</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+
+    <h2>Average price of the 30% most contacted listings</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Average Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>€ @averagePriceOfMostContactedListing.toInt,-</td>
+        </tr>
+        </tbody>
+    </table>
+    <h2>The Top 5 most contacted listings per Month</h2>
+    @for((date, listingsWithCount) <- mostContactedListingPerMonth) {
+        <h3>Month: @date.getMonthValue.@date.getYear</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Ranking</th>
+                <th>Listing Id</th>
+                <th>Make</th>
+                <th>Selling Price</th>
+                <th>Mileage</th>
+                <th>Total Amount of contacts</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for(((listing, count), index) <- listingsWithCount.zipWithIndex) {
+                <tr>
+                    <td>@{index+1}</td>
+                    <td>@listing.id</td>
+                    <td>@listing.make</td>
+                    <td>€ @listing.price.toInt,-</td>
+                    <td>@listing.mileage KM</td>
+                    <td>@count</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        }
+</div>

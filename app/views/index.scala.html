@@ -1,0 +1,23 @@
+@import models.Listing
+@(averagePricePerSellerType: Map[String, Double],
+  percentageOfCarsByMake: Map[String, Double],
+  averagePriceOfMostContactedListing: Double,
+  mostContactedListingPerMonth: Seq[(java.time.LocalDate, Seq[(Listing, Int)])])
+
+@main("Welcome to AutoScout24") {
+  <style>
+    table, th, td {
+      border-bottom: 1px solid black;
+      border-top: 1px solid black;
+      border-collapse: collapse;
+    }
+    td {
+      text-align: center;
+    }
+    .center {
+    margin: auto;
+    width: 50%;
+    }
+  </style>
+  @report(averagePricePerSellerType, percentageOfCarsByMake, averagePriceOfMostContactedListing, mostContactedListingPerMonth)
+}
